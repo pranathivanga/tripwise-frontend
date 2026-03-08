@@ -15,7 +15,7 @@ export function useTrips() {
     setPlans([])
 
     try {
-      const response = await fetch('http://54.226.116.18:8081/api/trips/plan', {
+      const response = await fetch('/api/trips/plan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -35,7 +35,7 @@ export function useTrips() {
 
     } catch (err) {
       console.error(err)
-      setError('Failed to fetch plans. Make sure Spring Boot backend is running on http://54.226.116.18:8081/api/trips/plan')
+      setError('Failed to fetch plans. Make sure the backend API is reachable.')
     } finally {
       setLoading(false)
     }

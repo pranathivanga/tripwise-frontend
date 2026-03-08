@@ -72,7 +72,7 @@ export default function ResultsSection({
     setSelectError(null)
     setItineraryLoading(true)
     try {
-      const response = await fetch('http://54.226.116.18:8081/api/trips/itinerary', {
+      const response = await fetch('/api/trips/itinerary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -100,7 +100,7 @@ export default function ResultsSection({
     if (!selectedPlan) return
     setPdfLoading(true)
     try {
-      const response = await fetch('http://54.226.116.18:8081/api/trips/pdf', {
+      const response = await fetch('/api/trips/pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

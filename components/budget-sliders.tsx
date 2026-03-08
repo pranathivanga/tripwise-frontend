@@ -26,7 +26,7 @@ export default function BudgetSliders({ totalBudget, setPlans, onRecalculate }: 
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch('http://54.226.116.18:8081/api/trips/adjust-budget', {
+      const response = await fetch('/api/trips/adjust-budget', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
