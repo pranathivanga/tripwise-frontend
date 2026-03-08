@@ -19,7 +19,7 @@ export function useMinimumBudget() {
         setResult(null)
 
         try {
-            const response = await fetch('http://localhost:8081/api/trips/minimum-budget', {
+            const response = await fetch('http://54.226.116.18:8081/api/trips/minimum-budget', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -36,7 +36,7 @@ export function useMinimumBudget() {
             setResult(json)
         } catch (err) {
             console.error(err)
-            setError('Failed to calculate minimum budget. Make sure Spring Boot backend is running on http://localhost:8081')
+            setError('Failed to calculate minimum budget. Make sure Spring Boot backend is running on http://54.226.116.18:8081/api/trips/plan')
         } finally {
             setLoading(false)
         }

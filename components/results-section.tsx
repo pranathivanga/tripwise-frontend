@@ -72,7 +72,7 @@ export default function ResultsSection({
     setSelectError(null)
     setItineraryLoading(true)
     try {
-      const response = await fetch('http://localhost:8081/api/trips/itinerary', {
+      const response = await fetch('http://54.226.116.18:8081/api/trips/itinerary', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -100,7 +100,7 @@ export default function ResultsSection({
     if (!selectedPlan) return
     setPdfLoading(true)
     try {
-      const response = await fetch('http://localhost:8081/api/trips/pdf', {
+      const response = await fetch('http://54.226.116.18:8081/api/trips/pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -158,17 +158,17 @@ export default function ResultsSection({
 
       {/* Plans Grid */}
       <div ref={plansRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-     {enrichedPlans.map((plan, index) => (
-  <PlanCard
-    key={index}
-    plan={plan}
-    isBestPlan={index === bestPlanIndex}
-    index={index}
-    isSelected={selectedPlan?.planType === plan.planType}
-    onSelect={handleSelectPlan}
-    totalBudget={totalBudget}
-  />
-))}
+        {enrichedPlans.map((plan, index) => (
+          <PlanCard
+            key={index}
+            plan={plan}
+            isBestPlan={index === bestPlanIndex}
+            index={index}
+            isSelected={selectedPlan?.planType === plan.planType}
+            onSelect={handleSelectPlan}
+            totalBudget={totalBudget}
+          />
+        ))}
       </div>
 
       {/* Action Buttons */}
