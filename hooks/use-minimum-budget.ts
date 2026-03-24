@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { MinimumBudgetResult } from '@/types/trip'
+import { api } from '@/lib/api'
 
 export function useMinimumBudget() {
     const [result, setResult] = useState<MinimumBudgetResult | null>(null)
@@ -19,20 +20,13 @@ export function useMinimumBudget() {
         setResult(null)
 
         try {
-            const response = await fetch('/api/trips/minimum-budget', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    sourceCity: data.sourceCity,
-                    destinationCity: data.destinationCity,
-                    days: data.days,
-                    travelers: data.travelers,
-                }),
+            const json = await api.post<MinimumBudgetResult>('/api/trips/minimum-budget', {
+                sourceCity: data.sourceCity,
+                destinationCity: data.destinationCity,
+                days: data.days,
+                travelers: data.travelers,
             })
 
-            if (!response.ok) throw new Error('Backend API request failed')
-
-            const json = await response.json()
             setResult(json)
         } catch (err) {
             console.error(err)

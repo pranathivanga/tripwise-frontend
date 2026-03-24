@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { TripPlan } from '@/types/trip'
+import { api } from '@/lib/api'
 
 interface Props {
   totalBudget: number
@@ -26,20 +27,13 @@ export default function BudgetSliders({ totalBudget, setPlans, onRecalculate }: 
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch('/api/trips/adjust-budget', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          travelPercent: travelPriority / totalPriority,
-          stayPercent: stayPriority / totalPriority,
-          foodPercent: foodPriority / totalPriority,
-          totalBudget
-        })
+      const result = await api.post<TripPlan | TripPlan[]>('/api/trips/adjust-budget', {
+        travelPercent: travelPriority / totalPriority,
+        stayPercent: stayPriority / totalPriority,
+        foodPercent: foodPriority / totalPriority,
+        totalBudget
       })
 
-      if (!response.ok) throw new Error('Failed to recalculate plan')
-
-      const result = await response.json()
       setPlans(Array.isArray(result) ? result : [result])
       onRecalculate?.()
     } catch (err) {

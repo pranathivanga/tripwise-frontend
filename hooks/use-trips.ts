@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { TripPlan, TripRequest } from '@/types/trip'
+import { api } from '@/lib/api'
 
 export function useTrips() {
   const [plans, setPlans] = useState<TripPlan[]>([])
@@ -15,21 +16,14 @@ export function useTrips() {
     setPlans([])
 
     try {
-      const response = await fetch('/api/trips/plan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sourceCity: data.sourceCity,
-          destinationCity: data.destinationCity,
-          days: data.days,
-          travelers: data.travelers,
-          totalBudget: data.totalBudget
-        }),
+      const result = await api.post<{ plans: TripPlan[] }>('/api/trips/plan', {
+        sourceCity: data.sourceCity,
+        destinationCity: data.destinationCity,
+        days: data.days,
+        travelers: data.travelers,
+        totalBudget: data.totalBudget
       })
 
-      if (!response.ok) throw new Error('Backend API request failed')
-
-      const result = await response.json()
       setPlans(result.plans)
       setTripRequest(data)
 

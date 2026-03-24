@@ -4,6 +4,7 @@ import { useMemo, useState, useRef } from 'react'
 import PlanCard from './plan-card'
 import { TripPlan } from '@/types/trip'
 import BudgetSliders from './budget-sliders'
+import { api } from '@/lib/api'
 
 interface ResultsSectionProps {
   plans: TripPlan[]
@@ -72,19 +73,14 @@ export default function ResultsSection({
     setSelectError(null)
     setItineraryLoading(true)
     try {
-      const response = await fetch('/api/trips/itinerary', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sourceCity,
-          destinationCity,
-          days,
-          travelers,
-          totalBudget: selectedPlan.totalCost,
-          planType: selectedPlan.planType
-        })
+      const data = await api.post<any[]>('/api/trips/itinerary', {
+        sourceCity,
+        destinationCity,
+        days,
+        travelers,
+        totalBudget: selectedPlan.totalCost,
+        planType: selectedPlan.planType
       })
-      const data = await response.json()
       setItinerary(data)
       setTimeout(() => {
         itineraryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -100,19 +96,14 @@ export default function ResultsSection({
     if (!selectedPlan) return
     setPdfLoading(true)
     try {
-      const response = await fetch('/api/trips/pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sourceCity,
-          destinationCity,
-          days,
-          travelers,
-          totalBudget: selectedPlan.totalCost,
-          planType: selectedPlan.planType
-        })
+      const blob = await api.postBlob('/api/trips/pdf', {
+        sourceCity,
+        destinationCity,
+        days,
+        travelers,
+        totalBudget: selectedPlan.totalCost,
+        planType: selectedPlan.planType
       })
-      const blob = await response.blob()
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
