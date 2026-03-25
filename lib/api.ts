@@ -1,23 +1,10 @@
 /**
  * Centralized API service layer.
  *
- * All backend calls go through this module so the base URL is defined
- * in exactly one place.  When running on Vercel the calls are also
- * proxied via `vercel.json` rewrites (relative `/api/` paths), but
- * this module lets you switch to direct calls when needed and keeps
- * every fetch consistent.
+ * All backend calls go through this module using relative paths
+ * (e.g. '/api/trips/plan'). Vercel rewrites in vercel.json proxy
+ * these requests to the Railway backend automatically.
  */
-
-const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_BASE_URL ??
-    'https://trip-budget-planner-backend-production.up.railway.app'
-
-/** Remove trailing slash from a URL to avoid double-slash issues. */
-const trimTrailingSlash = (url: string) => url.replace(/\/+$/, '')
-
-/** Build a full endpoint URL. */
-const buildUrl = (path: string) =>
-    `${trimTrailingSlash(API_BASE_URL)}${path.startsWith('/') ? path : `/${path}`}`
 
 /* ------------------------------------------------------------------ */
 /*  Core request helpers                                               */
@@ -35,7 +22,7 @@ async function request<T>(
 ): Promise<T> {
     const { body, headers, ...rest } = opts
 
-    const res = await fetch(buildUrl(path), {
+    const res = await fetch(path, {
         method,
         headers: {
             'Content-Type': 'application/json',
@@ -59,7 +46,7 @@ async function requestBlob(
 ): Promise<Blob> {
     const { body, headers, ...rest } = opts
 
-    const res = await fetch(buildUrl(path), {
+    const res = await fetch(path, {
         method,
         headers: {
             'Content-Type': 'application/json',
@@ -91,5 +78,3 @@ export const api = {
     postBlob: (path: string, body?: unknown, opts?: RequestOptions) =>
         requestBlob('POST', path, { ...opts, body }),
 }
-
-export { API_BASE_URL }
